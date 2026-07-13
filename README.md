@@ -1,160 +1,261 @@
 # 🎟️ EventNest
 
-A full-stack event management and ticketing platform where organizers can create and manage events while attendees can discover events, reserve seats, purchase tickets, and check in using QR codes.
+A production-ready full-stack event management and ticketing platform built with **Node.js, Express, MongoDB, Redis, Next.js, and Stripe**.
 
-Built with production-grade backend architecture using **Node.js**, **Express**, **MongoDB**, **Redis**, **Next.js**, and **Stripe**.
-
----
-
-## 🚀 Features
-
-### Authentication
-- User Registration & Login
-- JWT Authentication
-- Refresh Tokens
-- Role-Based Authorization (Admin, Organizer, Attendee)
-- Forgot Password
-- Email Verification
-
-### Event Management
-- Create, Update & Delete Events
-- Event Categories
-- Venue Management
-- Ticket Types
-- Event Analytics
-
-### Ticket Booking
-- Interactive Seat Selection
-- Redis-Based Seat Locking
-- Secure Stripe Payments
-- QR Code Ticket Generation
-- Downloadable PDF Tickets
-
-### Check-In System
-- QR Code Validation
-- Prevent Duplicate Entry
-- Real-Time Check-In Status
-
-### Organizer Dashboard
-- Revenue Analytics
-- Ticket Sales
-- Event Statistics
-- Check-In Reports
+EventNest allows organizers to create and manage events while attendees can discover events, reserve seats, purchase tickets securely, and check in using QR codes.
 
 ---
 
-## 🛠️ Tech Stack
+# 📌 Project Status
+
+> **Current Phase:** 🟢 Phase 2 – Authentication Module
+
+---
+
+# 🏗️ Project Architecture
+
+```
+EventNest/
+│
+├── backend/
+│   │
+│   ├── src/
+│   │   │
+│   │   ├── configs/
+│   │   ├── controllers/
+│   │   ├── middleware/
+│   │   ├── models/
+│   │   ├── repositories/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   ├── validators/
+│   │   ├── utils/
+│   │   ├── helpers/
+│   │   ├── constants/
+│   │   ├── jobs/
+│   │   ├── sockets/
+│   │   ├── emails/
+│   │   ├── pdf/
+│   │   ├── qr/
+│   │   ├── app.js
+│   │   │
+│   │   └── ...
+│   │
+│   ├── tests/
+│   ├── .env
+│   ├── package.json
+│   └── index.js
+│
+├── frontend/
+│
+└── README.md
+```
+
+---
+
+# 🚀 Development Roadmap
+
+## ✅ Phase 1 – Project Foundation
+
+- [x] Initialize Git Repository
+- [x] Connect GitHub Repository
+- [x] Setup Express Server
+- [x] Configure Environment Variables
+- [x] Connect MongoDB
+- [x] Configure Project Structure
+- [x] Setup Logging Middleware
+- [x] Health Check Endpoint
+
+---
+
+## 🟢 Phase 2 – Authentication
+
+- [ ] User Schema
+- [ ] Password Hashing (bcrypt)
+- [ ] Register API
+- [ ] Login API
+- [ ] JWT Authentication
+- [ ] Refresh Tokens
+- [ ] Logout
+- [ ] Authentication Middleware
+- [ ] Role Authorization
+- [ ] Forgot Password
+- [ ] Reset Password
+- [ ] Email Verification
+
+---
+
+## ⏳ Phase 3 – Venue Management
+
+- [ ] Venue Schema
+- [ ] Seat Schema
+- [ ] Create Venue
+- [ ] Update Venue
+- [ ] Delete Venue
+- [ ] Seat Categories
+- [ ] Venue Images
+
+---
+
+## ⏳ Phase 4 – Event Management
+
+- [ ] Event Schema
+- [ ] Event CRUD
+- [ ] Categories
+- [ ] Event Schedule
+- [ ] Speakers
+- [ ] Event Gallery
+- [ ] Organizer Events
+
+---
+
+## ⏳ Phase 5 – Ticket Management
+
+- [ ] Ticket Types
+- [ ] Pricing
+- [ ] Ticket Availability
+- [ ] Order Schema
+- [ ] Ticket Generation
+
+---
+
+## ⏳ Phase 6 – Redis Seat Reservation
+
+- [ ] Redis Integration
+- [ ] Seat Locking
+- [ ] TTL Expiration
+- [ ] Automatic Unlock
+- [ ] Concurrent Booking Protection
+
+---
+
+## ⏳ Phase 7 – Payments
+
+- [ ] Stripe Checkout
+- [ ] Payment Verification
+- [ ] Stripe Webhooks
+- [ ] Refund API
+- [ ] Order Confirmation
+
+---
+
+## ⏳ Phase 8 – QR Ticket System
+
+- [ ] QR Code Generation
+- [ ] Ticket PDF
+- [ ] Email Ticket
+- [ ] Download Ticket
+
+---
+
+## ⏳ Phase 9 – Event Check-in
+
+- [ ] QR Scanner API
+- [ ] Ticket Validation
+- [ ] Prevent Duplicate Entry
+- [ ] Check-in History
+
+---
+
+## ⏳ Phase 10 – Organizer Dashboard
+
+- [ ] Revenue Analytics
+- [ ] Ticket Sales
+- [ ] Attendance Statistics
+- [ ] Charts
+- [ ] Reports
+
+---
+
+## ⏳ Phase 11 – Admin Panel
+
+- [ ] User Management
+- [ ] Organizer Approval
+- [ ] Event Moderation
+- [ ] Reports
+- [ ] Platform Analytics
+
+---
+
+## ⏳ Phase 12 – Production Ready
+
+- [ ] Docker
+- [ ] Unit Testing
+- [ ] Integration Testing
+- [ ] Swagger API Documentation
+- [ ] CI/CD
+- [ ] Deployment
+
+---
+
+# 🛠️ Tech Stack
 
 ### Backend
+
 - Node.js
 - Express.js
 - MongoDB
 - Mongoose
 - Redis
 - JWT
+- bcrypt
 - Stripe
 - Cloudinary
-- SendGrid
+- Nodemailer / SendGrid
 - Puppeteer
 - QRCode
 
 ### Frontend
+
 - Next.js
 - React
 - Tailwind CSS
 
 ### DevOps
+
 - Docker
-- Git & GitHub
+- Git
+- GitHub
 
 ---
 
-## 📂 Project Structure
-
-```
-EventNest/
-│
-├── backend/
-├── frontend/
-└── README.md
-```
-
----
-
-## ⚙️ Installation
-
-### Clone the repository
-
-```bash
-git clone <repository-url>
-```
-
-### Move into the project
-
-```bash
-cd EventNest
-```
-
-### Install backend dependencies
-
-```bash
-cd backend
-npm install
-```
-
-### Start the development server
-
-```bash
-npm run dev
-```
-
----
-
-## 📅 Development Roadmap
-
-- [x] Project Setup
-- [ ] Authentication System
-- [ ] Venue Management
-- [ ] Event Management
-- [ ] Ticket Types
-- [ ] Seat Booking
-- [ ] Stripe Integration
-- [ ] QR Ticket Generation
-- [ ] Email Notifications
-- [ ] Organizer Dashboard
-- [ ] Admin Dashboard
-- [ ] Testing
-- [ ] Dockerization
-- [ ] Deployment
-
----
-
-## 🎯 Learning Goals
-
-This project is focused on learning and implementing production-ready backend concepts such as:
+# 🎯 Backend Concepts Covered
 
 - REST API Design
 - Authentication & Authorization
-- Repository-Service Architecture
-- Redis Caching & Seat Locking
-- Payment Gateway Integration
+- Repository Pattern
+- Service Layer Pattern
+- JWT Security
+- Password Hashing
+- MongoDB Relationships
+- Redis Caching
+- Distributed Locking
+- Payment Integration
 - QR Code Generation
 - PDF Generation
 - Email Services
+- File Uploads
+- Logging
+- Validation
+- Error Handling
 - Docker
-- Git Workflow
-- Error Handling & Logging
 
 ---
 
-## 📜 License
+# 📖 Learning Goal
 
-This project is built for educational and portfolio purposes.
+This project is being built from scratch using production-level backend architecture. Every feature is implemented step by step to understand not only **how** it works but also **why** it is designed that way.
 
 ---
 
-## 👨‍💻 Author
+# 📄 License
+
+This project is intended for learning and portfolio purposes.
+
+---
+
+# 👨‍💻 Author
 
 **Shounak Pandit**
 
-Built as part of my journey toward becoming a Backend & Full Stack Developer.
+Backend Developer | MERN Stack Developer
