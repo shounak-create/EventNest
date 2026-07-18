@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import {register,login,me,refreshToken, logout} from "../controllers/auth.controller.js";
+import {register,login,me,refreshToken, logout, googleLogin, googleCallback} from "../controllers/auth.controller.js";
 
 import {registerValidation,loginValidation,validate} from "../validators/auth.validators.js";
 
@@ -17,5 +17,11 @@ router.get("/me", requireAuth, me);
 router.post("/refresh-token", refreshToken);
 
 router.post("/logout",requireAuth,logout);
+
+// google auth
+
+router.get("/google", googleLogin);
+
+router.get("/google/callback", googleCallback);
 
 export default router;

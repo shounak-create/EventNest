@@ -10,6 +10,11 @@ const userSchema = new mongoose.Schema(
       maxlength: [50, "Full name cannot exceed 50 characters"],
     },
 
+    googleId: {
+      type: String,
+      default: null,
+    },
+
     email: {
       type: String,
       required: [true, "Email is required"],
@@ -20,7 +25,7 @@ const userSchema = new mongoose.Schema(
 
     password: {
       type: String,
-      required: true,
+      default: null,
       select: false,
     },
 

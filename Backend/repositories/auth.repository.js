@@ -12,12 +12,12 @@ export const findUserById = async (id) => {
     return await User.findById(id);
 };
 
-export const updateUser = async (id, updateData) => {
-    return await User.findByIdAndUpdate(id, updateData, {
-        new: true,
-        runValidators: true,
-    });
-};
+// export const updateUser = async (id, updateData) => {
+//     return await User.findByIdAndUpdate(id, updateData, {
+//         new: true,
+//         runValidators: true,
+//     });
+// };
 
 export const findUserByEmailWithPassword = async (email) => {
 
@@ -57,4 +57,26 @@ export const saveRefreshToken = async (userId, refreshToken) => {
 //     return await RefreshToken.findOneAndDelete({
 //         user: userId,
 //     });
+// };
+
+// Google signin
+
+
+export const findUserByGoogleId = async (googleId) => {
+    return await User.findOne({ googleId });
+};
+
+export const updateUser = async (userId, updateData) => {
+    return await User.findByIdAndUpdate(
+        userId,
+        updateData,
+        {
+            returnDocument: "after",
+            runValidators: true,
+        }
+    );
+};
+
+// export const findUserByGoogleId = async (googleId) => {
+//     return await User.findOne({ googleId });
 // };
