@@ -5,6 +5,8 @@ import cookieParser from "cookie-parser";
 
 import authRoutes from "./routes/auth.routes.js";
 import eventRoutes from "./routes/event.routes.js";
+import bookingRoutes from "./routes/booking.routes.js";
+
 
 
 
@@ -19,6 +21,7 @@ app.use(morgan("dev"));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);
+app.use("/api/bookings", bookingRoutes);
 
 // Health Check Route
 app.get("/", (req, res) => {
