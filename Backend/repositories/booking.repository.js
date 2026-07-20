@@ -6,8 +6,14 @@ export const createBooking = async (bookingData) => {
 
 export const findBookingById = async (bookingId) => {
     return await Booking.findById(bookingId)
-        .populate("event")
-        .populate("attendee", "fullName email avatar");
+        .populate(
+            "event",
+            "title venue startDate organizer"
+        )
+        .populate(
+            "attendee",
+            "fullName email avatar"
+        );
 };
 
 export const findBookingsByAttendee = async (attendeeId) => {
