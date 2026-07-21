@@ -1,4 +1,4 @@
-import sgMail from "../configs/sendgrip.js";
+import sgMail from "../configs/sendgrid.js";
 
 export const sendEmail = async ({
     to,

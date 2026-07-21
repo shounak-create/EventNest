@@ -1,6 +1,6 @@
-import dotenv from "dotenv";
-
-dotenv.config();
+import "dotenv/config";
+console.log(process.env.SENDGRID_API_KEY);
+console.log(process.env.SENDGRID_FROM_EMAIL);
 
 import app from "./app.js";
 import connectDB from "./configs/db.js";
