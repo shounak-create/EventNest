@@ -42,11 +42,6 @@ const bookingSchema = new mongoose.Schema(
       default: "",
     },
 
-    qrCode: {
-      type: String,
-      default: "",
-    },
-
     checkedIn: {
       type: Boolean,
       default: false,
