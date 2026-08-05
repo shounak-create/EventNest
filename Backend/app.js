@@ -7,6 +7,7 @@ import authRoutes from "./routes/auth.routes.js";
 import eventRoutes from "./routes/event.routes.js";
 import bookingRoutes from "./routes/booking.routes.js";
 import ticketRoutes from "./routes/ticket.routes.js";
+import checkInRoutes from "./routes/checkin.routes.js";
 
 
 
@@ -24,6 +25,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/tickets", ticketRoutes);
+app.use("/api/checkin", checkInRoutes);
 
 // Health Check Route
 app.get("/", (req, res) => {

@@ -43,3 +43,42 @@ export const deleteBooking = async (bookingId) => {
         bookingId
     );
 };
+
+export const findBookingByTicketReference = async (
+    ticketReference
+) => {
+    return await Booking.findOne({
+        ticketReference,
+    })
+        .populate(
+            "event",
+            "title venue startDate organizer"
+        )
+        .populate(
+            "attendee",
+            "fullName email avatar"
+        );
+};
+
+export const checkInBooking = async (
+    bookingId
+) => {
+    return await Booking.findByIdAndUpdate(
+        bookingId,
+        {
+            checkedIn: true,
+            checkedInAt: new Date(),
+        },
+        {
+            returnDocument: "after",
+        }
+    )
+        .populate(
+            "event",
+            "title venue startDate organizer"
+        )
+        .populate(
+            "attendee",
+            "fullName email avatar"
+        );
+};
