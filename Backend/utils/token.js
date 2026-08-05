@@ -38,3 +38,25 @@ export const verifyRefreshToken = (token) => {
         process.env.JWT_REFRESH_SECRET
     );
 };
+
+/* ---------- Ticket Tokens ---------- */
+
+export const generateTicketToken = (bookingId) => {
+    return jwt.sign(
+        {
+            bookingId,
+            type: "ticket",
+        },
+        process.env.JWT_TICKET_SECRET,
+        {
+            expiresIn: "30d",
+        }
+    );
+};
+
+export const verifyTicketToken = (token) => {
+    return jwt.verify(
+        token,
+        process.env.JWT_TICKET_SECRET
+    );
+};

@@ -23,7 +23,7 @@ export const bookingConfirmationTemplate = ({
     eventDate,
     quantity,
     ticketReference,
-    qrCode,
+    downloadLink,
 }) => {
     return `
 <!DOCTYPE html>
@@ -197,32 +197,6 @@ ${ticketReference}
 </td>
 </tr>
 
-<!-- QR -->
-
-<tr>
-
-<td align="center">
-
-<h3
-style="
-color:${COLORS.text};
-margin-bottom:5px;
-">
-
-Scan this QR at the entrance
-
-</h3>
-
-<img
-src="${qrCode}"
-alt="QR Code"
-width="220"
-height="220"
-/>
-
-</td>
-
-</tr>
 
 <!-- INFO -->
 
@@ -237,9 +211,9 @@ font-size:15px;
 line-height:24px;
 ">
 
-Please keep this email safe.
+Your ticket is ready.
 
-You'll need this QR code during check-in.
+Click the button below to securely generate and download your PDF ticket anytime.
 
 </td>
 
@@ -251,82 +225,39 @@ You'll need this QR code during check-in.
 
 <td
 style="
-padding:0 30px 30px;
+padding:30px;
+text-align:center;
 ">
 
-<table
-width="100%"
-cellpadding="10"
-cellspacing="0"
+<a
+href="${downloadLink}"
 style="
-border:1px dashed ${COLORS.border};
-border-radius:10px;
-">
-
-<tr>
-
-<td
-style="
+display:inline-block;
+background:${COLORS.primary};
+color:white;
+padding:16px 32px;
+border-radius:8px;
+text-decoration:none;
+font-size:16px;
 font-weight:bold;
 ">
 
-🚀 Coming Soon
+🎟 Download Ticket
 
-</td>
+</a>
 
-</tr>
+<p
+style="
+margin-top:20px;
+font-size:14px;
+color:${COLORS.muted};
+line-height:22px;
+">
 
-<tr>
+This link securely generates your ticket on demand.
+No ticket files are permanently stored on our servers.
 
-<td>
-
-• Download PDF Ticket
-
-</td>
-
-</tr>
-
-<tr>
-
-<td>
-
-• Add to Google Calendar
-
-</td>
-
-</tr>
-
-<tr>
-
-<td>
-
-• View Booking Online
-
-</td>
-
-</tr>
-
-<tr>
-
-<td>
-
-• Contact Organizer
-
-</td>
-
-</tr>
-
-<tr>
-
-<td>
-
-• Event Reminders
-
-</td>
-
-</tr>
-
-</table>
+</p>
 
 </td>
 

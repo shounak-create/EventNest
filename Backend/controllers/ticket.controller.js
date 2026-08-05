@@ -4,11 +4,12 @@ export const downloadBookingTicket = async (req, res, next) => {
 
     try {
 
-        const { pdf, ticketReference } =
-            await downloadTicket(
-                req.params.bookingId,
-                req.user
-            );
+        const { token } = req.query;
+
+        const {
+            pdf,
+            ticketReference,
+        } = await downloadTicket(token);
 
         res.setHeader(
             "Content-Type",
@@ -23,7 +24,9 @@ export const downloadBookingTicket = async (req, res, next) => {
         return res.send(pdf);
 
     } catch (error) {
+
         next(error);
+
     }
 
 };

@@ -33,7 +33,6 @@ export const registerValidation = [
 
 export const validate = (req, res, next) => {
   const result = validationResult(req);
-  // console.log(result.array());
   if (result.isEmpty()) {
     return next();
   }

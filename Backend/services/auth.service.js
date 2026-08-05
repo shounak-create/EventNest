@@ -33,8 +33,6 @@ export const registerUser = async ({ fullName, email, password }) => {
 
     const hashedPassword = await hashPassword(password);
 
-    // console.log("Original Password:", password);
-    // console.log("Hashed Password:", hashedPassword);
 
     const user = await createUser({
         fullName,

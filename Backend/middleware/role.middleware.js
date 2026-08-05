@@ -1,6 +1,4 @@
 export const authorize = (...roles) => {
-//   console.log("Allowed Roles:", roles);
-//   console.log("User Role:",roles);
   return (req, res, next) => {
     if (!req.user) {
       return res.status(401).json({

@@ -1,10 +1,15 @@
 import { sendEmail } from "../utils/mail.js";
 import { bookingConfirmationTemplate } from "../templates/bookingComformation.template.js";
+import { generateTicketToken } from "../utils/token.js";
 
 export const sendBookingConfirmation = async (booking) => {
 
-        console.log("📧 Email Service Started");
+    const ticketToken = generateTicketToken(
+        booking._id.toString()
+    );
 
+    const downloadLink =
+        `${process.env.BACKEND_URL}/api/tickets/download?token=${ticketToken}`;
 
     const html = bookingConfirmationTemplate({
 
@@ -20,7 +25,7 @@ export const sendBookingConfirmation = async (booking) => {
 
         ticketReference: booking.ticketReference,
 
-        qrCode: booking.qrCode,
+        downloadLink,
 
     });
 
@@ -33,8 +38,6 @@ export const sendBookingConfirmation = async (booking) => {
         html,
 
     });
-
-        console.log("✅ Email Sent");
 
 
 };
