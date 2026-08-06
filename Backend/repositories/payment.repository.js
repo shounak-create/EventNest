@@ -1,27 +1,52 @@
 import Payment from "../models/Payment.models.js";
 
-export const createPayment = async (paymentData) => {
-    return await Payment.create(paymentData);
+export const createPayment = async (
+    paymentData,
+    session = null
+) => {
+
+    const payment = new Payment(paymentData);
+
+    return await payment.save({
+        session,
+    });
+
 };
 
-export const findPaymentByOrderId = async (razorpayOrderId) => {
+export const findPaymentByOrderId = async (
+    razorpayOrderId
+) => {
+
     return await Payment.findOne({
         razorpayOrderId,
     })
         .populate("event")
         .populate("attendee");
+
 };
 
 export const updatePayment = async (
     paymentId,
-    updateData
+    updateData,
+    session = null
 ) => {
+
     return await Payment.findByIdAndUpdate(
+
         paymentId,
+
         updateData,
+
         {
-            returnDocument: "after",
+
+            new: true,
+
             runValidators: true,
+
+            session,
+
         }
+
     );
+
 };
