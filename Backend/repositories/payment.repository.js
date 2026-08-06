@@ -50,3 +50,26 @@ export const updatePayment = async (
     );
 
 };
+
+export const markPaymentFailed = async (
+    paymentId,
+    session = null
+) => {
+
+    return await Payment.findByIdAndUpdate(
+
+        paymentId,
+
+        {
+            status: "failed",
+        },
+
+        {
+            new: true,
+            runValidators: true,
+            session,
+        }
+
+    );
+
+};

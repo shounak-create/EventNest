@@ -132,3 +132,21 @@ export const releaseReservedSeats = async (
     );
 
 };
+
+export const cancelSeatReservation = async (
+    eventId,
+    attendeeId,
+    quantity
+) => {
+
+    await releaseReservedSeats(
+        eventId,
+        quantity
+    );
+
+    await releaseSeatLock(
+        eventId,
+        attendeeId
+    );
+
+};

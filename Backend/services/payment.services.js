@@ -1,185 +1,276 @@
 import crypto from "crypto";
 
+import { mongoose } from "../configs/db.js";
 import razorpay from "../configs/razorpay.js";
 
-import { findEventById } from "../repositories/event.repository.js";
 import {
-  createPayment,
-  findPaymentByOrderId,
-  updatePayment,
+    findEventById,
+    decreaseRemainingSeats,
+} from "../repositories/event.repository.js";
+
+import {
+    createPayment,
+    findPaymentByOrderId,
+    updatePayment,
 } from "../repositories/payment.repository.js";
 
-import { createNewBooking } from "./booking.service.js";
-import mongoose from "mongoose";
+import {
+    findBookingById,
+} from "../repositories/booking.repository.js";
 
-import { decreaseRemainingSeats } from "../repositories/event.repository.js";
-import { findBookingById } from "../repositories/booking.repository.js";
-import { sendBookingConfirmation } from "./email.service.js";
+import {
+    createNewBooking,
+} from "./booking.service.js";
 
-//redis
-import { lockSeats,getSeatLock,releaseSeatLock,initializeEventSeats,reserveSeats,releaseReservedSeats } from "./redis.service.js";
+import {
+    sendBookingConfirmation,
+} from "./email.service.js";
 
+import {
+    lockSeats,
+    getSeatLock,
+    releaseSeatLock,
+    initializeEventSeats,
+    reserveSeats,
+} from "./redis.service.js";
 
-export const createOrder = async (attendeeId, eventId, quantity) => {
-  const event = await findEventById(eventId);
-
-  if (!event) {
-    throw new Error("Event not found.");
-  }
-
-  if (!event.isPublished) {
-    throw new Error("This event is not available.");
-  }
-
-  if (event.status !== "published") {
-    throw new Error("Bookings are closed.");
-  }
-
-  if (event.remainingSeats < quantity) {
-    throw new Error("Not enough seats available.");
-  }
-
-  //seat Handling
-  await initializeEventSeats(
-    event._id.toString(),
-    event.remainingSeats
-);
-
-await reserveSeats(
-    event._id.toString(),
-    quantity
-);
-
-await lockSeats(
-    event._id.toString(),
+export const createOrder = async (
     attendeeId,
+    eventId,
     quantity
-);
+) => {
 
-  const amount = event.price * quantity;
+    const event =
+        await findEventById(eventId);
 
-  const order = await razorpay.orders.create({
-    amount: amount * 100,
+    if (!event) {
+        throw new Error("Event not found.");
+    }
 
-    currency: "INR",
+    if (!event.isPublished) {
+        throw new Error(
+            "This event is not available."
+        );
+    }
 
-    receipt: `receipt_${Date.now()}`,
-  });
+    if (
+        event.status !== "published"
+    ) {
+        throw new Error(
+            "Bookings are closed."
+        );
+    }
 
-  await createPayment({
-    attendee: attendeeId,
+    if (
+        event.remainingSeats < quantity
+    ) {
+        throw new Error(
+            "Not enough seats available."
+        );
+    }
 
-    event: event._id,
+    await initializeEventSeats(
+        event._id.toString(),
+        event.remainingSeats
+    );
 
-    quantity,
+    await reserveSeats(
+        event._id.toString(),
+        quantity
+    );
 
-    amount,
+    await lockSeats(
+        event._id.toString(),
+        attendeeId,
+        quantity
+    );
 
-    razorpayOrderId: order.id,
-  });
+    const amount =
+        event.price * quantity;
 
-  return {
-    orderId: order.id,
+    const order =
+        await razorpay.orders.create({
 
-    amount: order.amount,
+            amount: amount * 100,
 
-    currency: order.currency,
+            currency: "INR",
 
-    key: process.env.RAZORPAY_KEY_ID,
-  };
+            receipt: `receipt_${Date.now()}`,
+
+        });
+
+    await createPayment({
+
+        attendee: attendeeId,
+
+        event: event._id,
+
+        quantity,
+
+        amount,
+
+        razorpayOrderId: order.id,
+
+    });
+
+    return {
+
+        orderId: order.id,
+
+        amount: order.amount,
+
+        currency: order.currency,
+
+        key: process.env.RAZORPAY_KEY_ID,
+
+    };
+
 };
 
 export const verifyPayment = async ({
-  razorpay_order_id,
 
-  razorpay_payment_id,
+    razorpay_order_id,
 
-  razorpay_signature,
+    razorpay_payment_id,
+
+    razorpay_signature,
+
 }) => {
-  const generatedSignature = crypto
-    .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
-    .update(`${razorpay_order_id}|${razorpay_payment_id}`)
-    .digest("hex");
 
-  if (generatedSignature !== razorpay_signature) {
-    throw new Error("Invalid payment signature.");
-  }
+    const generatedSignature =
+        crypto
+            .createHmac(
+                "sha256",
+                process.env.RAZORPAY_KEY_SECRET
+            )
+            .update(
+                `${razorpay_order_id}|${razorpay_payment_id}`
+            )
+            .digest("hex");
 
-  const payment = await findPaymentByOrderId(razorpay_order_id);
+    if (
+        generatedSignature !==
+        razorpay_signature
+    ) {
+        throw new Error(
+            "Invalid payment signature."
+        );
+    }
 
-  const seatLock =
-    await getSeatLock(
+    const payment =
+        await findPaymentByOrderId(
+            razorpay_order_id
+        );
+
+    if (!payment) {
+        throw new Error(
+            "Payment not found."
+        );
+    }
+
+    const seatLock =
+        await getSeatLock(
+            payment.event._id.toString(),
+            payment.attendee._id.toString()
+        );
+
+    if (!seatLock) {
+        throw new Error(
+            "Seat reservation has expired."
+        );
+    }
+
+    if (
+        payment.status === "paid"
+    ) {
+        throw new Error(
+            "Payment already verified."
+        );
+    }
+
+    const session =
+        await mongoose.startSession();
+
+    let booking;
+
+    try {
+
+        session.startTransaction();
+
+        await updatePayment(
+
+            payment._id,
+
+            {
+
+                status: "paid",
+
+                razorpayPaymentId:
+                    razorpay_payment_id,
+
+            },
+
+            session
+
+        );
+
+        booking =
+            await createNewBooking(
+
+                payment.attendee._id.toString(),
+
+                {
+
+                    eventId:
+                        payment.event._id.toString(),
+
+                    quantity:
+                        payment.quantity,
+
+                },
+
+                session
+
+            );
+
+        await decreaseRemainingSeats(
+
+            payment.event._id,
+
+            payment.quantity,
+
+            session
+
+        );
+
+        await session.commitTransaction();
+
+    } catch (error) {
+
+        await session.abortTransaction();
+
+        throw error;
+
+    } finally {
+
+        await session.endSession();
+
+    }
+
+    await releaseSeatLock(
         payment.event._id.toString(),
         payment.attendee._id.toString()
     );
 
-if (!seatLock) {
-    throw new Error(
-        "Seat reservation has expired."
-    );
-}
+    const populatedBooking =
+        await findBookingById(
+            booking._id
+        );
 
-  if (!payment) {
-    throw new Error("Payment not found.");
-  }
-
-  if (payment.status === "paid") {
-    throw new Error("Payment already verified.");
-  }
-
-  const session = await mongoose.startSession();
-
-  let booking;
-
-  try {
-    session.startTransaction();
-
-    await updatePayment(
-      payment._id,
-
-      {
-        status: "paid",
-
-        razorpayPaymentId: razorpay_payment_id,
-      },
-
-      session,
+    await sendBookingConfirmation(
+        populatedBooking
     );
 
-    booking = await createNewBooking(
-      payment.attendee._id.toString(),
+    return populatedBooking;
 
-      {
-        eventId: payment.event._id.toString(),
-
-        quantity: payment.quantity,
-      },
-
-      session,
-    );
-
-    await releaseSeatLock(payment.event._id.toString(),payment.attendee._id.toString());
-
-    await decreaseRemainingSeats(
-      payment.event._id,
-
-      payment.quantity,
-
-      session,
-    );
-
-    await session.commitTransaction();
-  } catch (error) {
-    await session.abortTransaction();
-
-    throw error;
-  } finally {
-    session.endSession();
-  }
-
-  const populatedBooking = await findBookingById(booking._id);
-
-  await sendBookingConfirmation(populatedBooking);
-
-  return populatedBooking;
 };
