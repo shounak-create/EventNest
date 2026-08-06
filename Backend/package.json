@@ -27,6 +27,7 @@
     "puppeteer": "^25.4.0",
     "qrcode": "^1.5.4",
     "razorpay": "^2.9.8",
+    "redis": "^6.2.0",
     "stripe": "^22.3.2"
   },
   "devDependencies": {
