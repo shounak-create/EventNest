@@ -1,12 +1,14 @@
 import Event from "../models/Event.models.js";
 
 export const createEvent = async (eventData) => {
-    return await Event.create(eventData);
+  return await Event.create(eventData);
 };
 
 export const findEventById = async (eventId) => {
-    return await Event.findById(eventId)
-        .populate("organizer", "fullName email avatar");
+  return await Event.findById(eventId).populate(
+    "organizer",
+    "fullName email avatar",
+  );
 };
 
 // export const findAllEvents = async () => {
@@ -20,33 +22,48 @@ export const findEventById = async (eventId) => {
 // };
 
 export const findAllEvents = async () => {
-    return await Event.find()
-        .populate("organizer", "fullName email avatar")
-        .sort({ startDate: 1 });
+  return await Event.find()
+    .populate("organizer", "fullName email avatar")
+    .sort({ startDate: 1 });
 };
 
 export const findEventsByOrganizer = async (organizerId) => {
-    return await Event.find({
-        organizer: organizerId,
-    }).sort({
-        createdAt: -1,
-    });
+  return await Event.find({
+    organizer: organizerId,
+  }).sort({
+    createdAt: -1,
+  });
 };
 
-export const updateEvent = async (
-    eventId,
-    updateData
-) => {
-    return await Event.findByIdAndUpdate(
-        eventId,
-        updateData,
-        {
-            returnDocument: "after",
-            runValidators: true,
-        }
-    );
+export const updateEvent = async (eventId, updateData) => {
+  return await Event.findByIdAndUpdate(eventId, updateData, {
+    returnDocument: "after",
+    runValidators: true,
+  });
 };
 
 export const deleteEvent = async (eventId) => {
-    return await Event.findByIdAndDelete(eventId);
+  return await Event.findByIdAndDelete(eventId);
+};
+
+export const decreaseRemainingSeats = async (
+  eventId,
+  quantity,
+  session = null,
+) => {
+  return await Event.findByIdAndUpdate(
+    eventId,
+
+    {
+      $inc: {
+        remainingSeats: -quantity,
+      },
+    },
+
+    {
+      new: true,
+
+      session,
+    },
+  );
 };
