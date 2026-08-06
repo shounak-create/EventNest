@@ -8,7 +8,7 @@ EventNest enables organizers to publish events, manage attendees, verify tickets
 
 # 📌 Project Status
 
-> **Current Phase:** 🟢 Core Backend Development (Booking & Ticketing)
+> **Current Phase:** 🟢 Backend Infrastructure (Payments, Redis & Production APIs)
 
 ---
 
