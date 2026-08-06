@@ -16,6 +16,9 @@ import { decreaseRemainingSeats } from "../repositories/event.repository.js";
 import { findBookingById } from "../repositories/booking.repository.js";
 import { sendBookingConfirmation } from "./email.service.js";
 
+//redis
+import { lockSeats,getSeatLock,releaseSeatLock } from "./redis.service.js";
+
 export const createOrder = async (attendeeId, eventId, quantity) => {
   const event = await findEventById(eventId);
 
@@ -34,6 +37,13 @@ export const createOrder = async (attendeeId, eventId, quantity) => {
   if (event.remainingSeats < quantity) {
     throw new Error("Not enough seats available.");
   }
+
+  //seat look redis
+  await lockSeats(
+    event._id.toString(),
+    attendeeId,
+    quantity
+);
 
   const amount = event.price * quantity;
 
@@ -86,6 +96,18 @@ export const verifyPayment = async ({
 
   const payment = await findPaymentByOrderId(razorpay_order_id);
 
+  const seatLock =
+    await getSeatLock(
+        payment.event._id.toString(),
+        payment.attendee._id.toString()
+    );
+
+if (!seatLock) {
+    throw new Error(
+        "Seat reservation has expired."
+    );
+}
+
   if (!payment) {
     throw new Error("Payment not found.");
   }
@@ -124,6 +146,8 @@ export const verifyPayment = async ({
 
       session,
     );
+
+    await releaseSeatLock(payment.event._id.toString(),payment.attendee._id.toString());
 
     await decreaseRemainingSeats(
       payment.event._id,
