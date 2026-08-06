@@ -17,7 +17,8 @@ import { findBookingById } from "../repositories/booking.repository.js";
 import { sendBookingConfirmation } from "./email.service.js";
 
 //redis
-import { lockSeats,getSeatLock,releaseSeatLock } from "./redis.service.js";
+import { lockSeats,getSeatLock,releaseSeatLock,initializeEventSeats,reserveSeats,releaseReservedSeats } from "./redis.service.js";
+
 
 export const createOrder = async (attendeeId, eventId, quantity) => {
   const event = await findEventById(eventId);
@@ -38,8 +39,18 @@ export const createOrder = async (attendeeId, eventId, quantity) => {
     throw new Error("Not enough seats available.");
   }
 
-  //seat look redis
-  await lockSeats(
+  //seat Handling
+  await initializeEventSeats(
+    event._id.toString(),
+    event.remainingSeats
+);
+
+await reserveSeats(
+    event._id.toString(),
+    quantity
+);
+
+await lockSeats(
     event._id.toString(),
     attendeeId,
     quantity

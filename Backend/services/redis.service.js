@@ -73,3 +73,62 @@ export const releaseSeatLock = async (
     await redis.del(key);
 
 };
+
+export const initializeEventSeats = async (
+    eventId,
+    seats
+) => {
+
+    const key = `event-seats:${eventId}`;
+
+    const exists = await redis.exists(key);
+
+    if (!exists) {
+
+        await redis.set(
+            key,
+            seats
+        );
+
+    }
+
+};
+
+export const reserveSeats = async (
+    eventId,
+    quantity
+) => {
+
+    const key = `event-seats:${eventId}`;
+
+    const availableSeats =
+        Number(await redis.get(key));
+
+    if (availableSeats < quantity) {
+
+        throw new Error(
+            "Not enough seats available."
+        );
+
+    }
+
+    await redis.decrBy(
+        key,
+        quantity
+    );
+
+};
+
+export const releaseReservedSeats = async (
+    eventId,
+    quantity
+) => {
+
+    const key = `event-seats:${eventId}`;
+
+    await redis.incrBy(
+        key,
+        quantity
+    );
+
+};
