@@ -10,7 +10,8 @@ import ticketRoutes from "./routes/ticket.routes.js";
 import checkInRoutes from "./routes/checkin.routes.js";
 import paymentRoutes from "./routes/payment.routes.js";
 
-
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./configs/swagger.js";
 
 
 const app = express();
@@ -28,6 +29,8 @@ app.use("/api/bookings", bookingRoutes);
 app.use("/api/tickets", ticketRoutes);
 app.use("/api/checkin", checkInRoutes);
 app.use("/api/payments", paymentRoutes);
+
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Health Check Route
 app.get("/", (req, res) => {
