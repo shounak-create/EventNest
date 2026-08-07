@@ -9,6 +9,7 @@ import bookingRoutes from "./routes/booking.routes.js";
 import ticketRoutes from "./routes/ticket.routes.js";
 import checkInRoutes from "./routes/checkin.routes.js";
 import paymentRoutes from "./routes/payment.routes.js";
+import organizerDashboardRoutes from "./routes/organizerDashboard.routes.js";
 
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./configs/swagger.js";
@@ -29,6 +30,11 @@ app.use("/api/bookings", bookingRoutes);
 app.use("/api/tickets", ticketRoutes);
 app.use("/api/checkin", checkInRoutes);
 app.use("/api/payments", paymentRoutes);
+
+app.use(
+    "/api/organizer-dashboard",
+    organizerDashboardRoutes
+);
 
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
