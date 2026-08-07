@@ -10,6 +10,7 @@ import ticketRoutes from "./routes/ticket.routes.js";
 import checkInRoutes from "./routes/checkin.routes.js";
 import paymentRoutes from "./routes/payment.routes.js";
 import organizerDashboardRoutes from "./routes/organizerDashboard.routes.js";
+import adminRoutes from "./routes/admin.routes.js";
 
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./configs/swagger.js";
@@ -35,6 +36,8 @@ app.use(
     "/api/organizer-dashboard",
     organizerDashboardRoutes
 );
+
+app.use("/api/admin", adminRoutes);
 
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
