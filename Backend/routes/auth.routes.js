@@ -38,21 +38,7 @@ const router = Router();
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - fullName
- *               - email
- *               - password
- *             properties:
- *               fullName:
- *                 type: string
- *                 example: Shounak Pandit
- *               email:
- *                 type: string
- *                 example: shounak@gmail.com
- *               password:
- *                 type: string
- *                 example: Password@123
+ *             $ref: '#/components/schemas/RegisterRequest'
  *     responses:
  *       201:
  *         description: User registered successfully
@@ -77,17 +63,7 @@ router.post(
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - email
- *               - password
- *             properties:
- *               email:
- *                 type: string
- *                 example: shounak@gmail.com
- *               password:
- *                 type: string
- *                 example: Password@123
+ *             $ref: '#/components/schemas/LoginRequest'
  *     responses:
  *       200:
  *         description: Login successful
