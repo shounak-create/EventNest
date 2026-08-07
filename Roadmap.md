@@ -80,10 +80,23 @@
 
 ---
 
+### API Documentation
+
+- [x] Swagger / OpenAPI Integration
+- [x] Authentication Documentation
+- [x] Event APIs Documentation
+- [x] Booking APIs Documentation
+- [x] Payment APIs Documentation
+- [x] Check-in APIs Documentation
+- [x] Ticket APIs Documentation
+- [x] Reusable Request Schemas
+
+---
+
 ## 🚧 Phase 1 — Payment Completion
 
 - [ ] Razorpay Checkout Integration (Next.js)
-- [ ] Payment Failure & Expiration Handling
+- [ ] Payment Failure Handling
 - [ ] Automatic Seat Release
 - [ ] Razorpay Webhooks
 - [ ] Refund Management
@@ -136,7 +149,6 @@
 
 ## 🚧 Phase 4 — Production Readiness
 
-- [ ] Swagger / OpenAPI Documentation
 - [ ] Docker Compose
 - [ ] Cloudinary Integration
 - [ ] Professional Email Templates
