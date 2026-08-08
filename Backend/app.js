@@ -47,11 +47,11 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Health Check Route
-app.get("/", (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: "Welcome to EventNest API 🚀"
-    });
-});
+// app.get("/", (req, res) => {
+//     res.status(200).json({
+//         success: true,
+//         message: "Welcome to EventNest API 🚀"
+//     });
+// });
 
 export default app;
