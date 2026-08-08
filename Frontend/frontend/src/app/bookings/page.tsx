@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getMyBookings, Booking } from "@/lib/bookings";
+import BookingCard from "@/components/bookings/BookingCard";
 
 export default function BookingsPage() {
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -55,56 +56,14 @@ export default function BookingsPage() {
       ) : (
         <div className="grid gap-6">
           {bookings.map((booking) => (
-            <div
+            <BookingCard
               key={booking._id}
-              className="rounded-xl border bg-white p-6"
-            >
-              <h2 className="text-2xl font-semibold">
-                {booking.event.title}
-              </h2>
-
-              <p className="mt-2 text-zinc-600">
-                {booking.event.venue}, {booking.event.city}
-              </p>
-
-              <p className="mt-1 text-zinc-600">
-                {new Date(
-                  booking.event.startDate
-                ).toLocaleDateString()}
-              </p>
-
-              <div className="mt-5 flex gap-6">
-                <div>
-                  <p className="text-sm text-zinc-500">
-                    Tickets
-                  </p>
-                  <p className="font-semibold">
-                    {booking.quantity}
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-sm text-zinc-500">
-                    Total
-                  </p>
-                  <p className="font-semibold">
-                    ₹{booking.totalAmount}
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-sm text-zinc-500">
-                    Status
-                  </p>
-                  <p className="font-semibold">
-                    {booking.status}
-                  </p>
-                </div>
-              </div>
-            </div>
+              booking={booking}
+            />
           ))}
         </div>
       )}
     </main>
   );
 }
+
