@@ -1,17 +1,33 @@
+
 import express from "express";
 
 import {
+    requireAuth,
+} from "../middleware/auth.middleware.js";
+
+import {
+    getTicketToken,
     downloadBookingTicket,
 } from "../controllers/ticket.controller.js";
 
+
 const router = express.Router();
+
 
 /**
  * @swagger
  * tags:
  *   name: Tickets
- *   description: Ticket Download APIs
+ *   description: Ticket APIs
  */
+
+
+router.get(
+    "/token/:bookingId",
+    requireAuth,
+    getTicketToken
+);
+
 
 /**
  * @swagger
@@ -38,4 +54,6 @@ router.get(
     downloadBookingTicket
 );
 
+
 export default router;
+

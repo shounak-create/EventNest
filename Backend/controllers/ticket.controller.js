@@ -1,10 +1,52 @@
-import { downloadTicket } from "../services/ticket.service.js";
 
-export const downloadBookingTicket = async (req, res, next) => {
+import {
+    createTicketToken,
+    downloadTicket,
+} from "../services/ticket.service.js";
+
+
+export const getTicketToken = async (
+    req,
+    res,
+    next
+) => {
 
     try {
 
-        const { token } = req.query;
+        const token =
+            await createTicketToken(
+                req.params.bookingId,
+                req.user.id
+            );
+
+        return res.status(200).json({
+
+            success: true,
+
+            data: {
+                token,
+            },
+
+        });
+
+    } catch (error) {
+
+        next(error);
+
+    }
+};
+
+
+export const downloadBookingTicket = async (
+    req,
+    res,
+    next
+) => {
+
+    try {
+
+        const { token } =
+            req.query;
 
         const {
             pdf,
@@ -30,3 +72,4 @@ export const downloadBookingTicket = async (req, res, next) => {
     }
 
 };
+
